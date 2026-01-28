@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compusoul EMR | Clinical Dashboard</title>
+    <style>
+        :root {
+            --primary: #2c3e50; /* Professional Navy */
+            --secondary: #3498db; /* Medical Blue */
+            --accent: #16a085; /* Calming Teal */
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --white: #ffffff;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+        }
+
+        /* --- Sidebar Navigation --- */
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 40px;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--secondary);
+        }
+
+        /* --- Main Content Area --- */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .user-profile {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* --- Modules (Hidden by default) --- */
+        .module {
+            display: none;
+            animation: fadeIn 0.4s;
+        }
+
+        .module.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Forms & Cards --- */
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        h2 { border-bottom: 2px solid var(--bg-light); padding-bottom: 10px; margin-top: 0; }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Columns */
+            gap: 20px;
+        }
+
+        .full-width { grid-column: span 2; }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Fix padding issues */
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+        }
+
+        /* --- Buttons --- */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover { background-color: #2980b9; }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 30px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">Compusoul EMR</div>
+        <div class="nav-item active" onclick="showModule('dashboard')">Dashboard</div>
+        <div class="nav-item" onclick="showModule('intake')">Patient Intake</div>
+        <div class="nav-item" onclick="showModule('assessment')">Clinical Assessment (CCA)</div>
+        <div class="nav-item" onclick="showModule('plan')">Person Centered Plan</div>
+        <div class="nav-item" onclick="showModule('admin')">Admin / Settings</div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1 id="page-title">Dashboard</h1>
+            <div class="user-profile">Dr. Smith (Clinical Director)</div>
+        </div>
+
+        <div id="dashboard" class="module active">
+            <input type="text" class="search-bar" placeholder="Patient Lookup (Name, DOB, or ID)...">
+            
+            <div class="form-grid">
+                <div class="card">
+                    <h3>Recent Activity</h3>
+                    <p><strong>Jane Doe:</strong> CCA Signed - 10:45 AM</p>
+                    <p><strong>John Smith:</strong> Intake Completed - 9:30 AM</p>
+                    <p><strong>Mike Ross:</strong> Lab Results Uploaded - Yesterday</p>
+                </div>
+                <div class="card">
+                    <h3>Caseload Status</h3>
+                    <p>Active Patients: <strong>142</strong></p>
+                    <p>Pending Plans: <strong style="color: red;">3</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="intake" class="module">
+            <div class="card">
+                <h2>New Patient Intake</h2>
+                <form onsubmit="event.preventDefault(); alert('Patient Saved!');">
+                    <div class="form-grid">
+                        <div>
+                            <label>First Name</label>
+                            <input type="text" required>
+                        </div>
+                        <div>
+                            <label>Last Name</label>
+                            <input type="text" required>
+                        </div>
+                        <div>
+                            <label>Date of Birth</label>
+                            <input type="date" required>
+                        </div>
+                        <div>
+                            <label>SSN (Last 4)</label>
+                            <input type="text" maxlength="4" placeholder="XXXX">
+                        </div>
+                        
+                        <div class="full-width">
+                            <label>Payor Source</label>
+                            <select>
+                                <option>Select Payor...</option>
+                                <option>Medicaid (NC)</option>
+                                <option>Blue Cross Blue Shield</option>
+                                <option>Self-Pay</option>
+                                <option>Uninsured</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="btn btn-primary">Create Patient Record</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="assessment" class="module">
+            <div class="card">
+                <h2>Comprehensive Clinical Assessment</h2>
+                <div class="form-grid">
+                    <div class="full-width">
+                        <label>Presenting Problem</label>
+                        <textarea rows="4" placeholder="Describe why the patient is seeking services today..."></textarea>
+                    </div>
+
+                    <div>
+                        <label>Substance Use History</label>
+                        <select multiple style="height: 100px;">
+                            <option>Alcohol</option>
+                            <option>Cannabis</option>
+                            <option>Opioids</option>
+                            <option>Stimulants</option>
+                            <option>None Reported</option>
+                        </select>
+                        <small>Hold Ctrl to select multiple</small>
+                    </div>
+
+                    <div>
+                        <label>Risk Assessment</label>
+                        <select>
+                            <option>Low Risk</option>
+                            <option>Moderate Risk</option>
+                            <option>High Risk (Immediate Action Required)</option>
+                        </select>
+                    </div>
+
+                    <div class="full-width">
+                        <label>Primary Diagnosis (ICD-10)</label>
+                        <select id="diagnosis-select">
+                            <option value="">Search or Select Diagnosis...</option>
+                            <option value="F33.1">F33.1 - Major Depressive Disorder, Recurrent, Moderate</option>
+                            <option value="F41.1">F41.1 - Generalized Anxiety Disorder</option>
+                            <option value="F10.20">F10.20 - Alcohol Dependence, Uncomplicated</option>
+                            <option value="
